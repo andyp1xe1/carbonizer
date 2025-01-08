@@ -10,9 +10,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"carbonizer/filters"
-	q "carbonizer/filters/quantizer"
-	"carbonizer/utils"
+	"github.com/andyp1xe1/carbonizer/filters"
+	q "github.com/andyp1xe1/carbonizer/filters/quantizer"
+	"github.com/andyp1xe1/carbonizer/utils"
 )
 
 var pathFlag *string

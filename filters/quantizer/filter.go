@@ -8,14 +8,14 @@ type Filter struct {
 	*quantizer
 }
 
-func NewFilter(depth int, opt paletteOpt) *Filter {
+func NewFilter(depth int, qf quantizerFunc, paletteOpt paletteOpt) *Filter {
 	return &Filter{
-		newQuantizer(depth, opt),
+		newQuantizer(depth, qf, paletteOpt),
 	}
 }
 
 func (f *Filter) Transform(in *image.RGBA) error {
-	f.medianCut(in)
+	f.quantize(f.quantizer, in)
 
-	return f.quantizeImg(in)
+	return f.exportImg(in)
 }

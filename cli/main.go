@@ -63,8 +63,10 @@ func filtersFromFlags() []filters.Filter {
 	if *quantizeDepthFlag != 0 {
 		quantizer := q.NewFilter(
 			*quantizeDepthFlag,
-			//q.WithDither(q.Bayer(3)),
+			q.MedianCut,
 			q.WithDither(q.FloydSteinsberg),
+
+			//q.WithDither(q.Bayer(3)),
 			//q.WithStdPalette,
 			//q.WithMapPalette,
 			//q.WithMemoPalette,

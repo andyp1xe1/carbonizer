@@ -6,6 +6,12 @@ import (
 
 type paletteMaker func(q *quantizer) Palette
 
+type quantizerFunc func(q *quantizer, img *image.RGBA)
+
+var (
+	MedianCut quantizerFunc = medianCut
+)
+
 type paletteOpt struct {
 	makePalette paletteMaker
 	ditherer    DitherIter
@@ -33,18 +39,20 @@ type quantizer struct {
 	colorBucket
 	depth int
 
+	quantize   quantizerFunc
 	paletteOpt paletteOpt
 }
 
-func newQuantizer(depth int, opt paletteOpt) *quantizer {
+func newQuantizer(depth int, qf quantizerFunc, opt paletteOpt) *quantizer {
 	return &quantizer{
 		colorBucket: newBucket(),
 		depth:       depth,
+		quantize:    qf,
 		paletteOpt:  opt,
 	}
 }
 
-func (q *quantizer) medianCut(img *image.RGBA) {
+func medianCut(q *quantizer, img *image.RGBA) {
 	q.makeBucketBuff(img)
 	currBucket := colorBucket{q.buff, q.axis}
 
@@ -61,7 +69,7 @@ func (q *quantizer) medianCut(img *image.RGBA) {
 	}
 }
 
-func (q *quantizer) quantizeImg(img *image.RGBA) error {
+func (q *quantizer) exportImg(img *image.RGBA) error {
 	bounds := img.Bounds()
 
 	p := q.paletteOpt.makePalette(q)
